@@ -1,12 +1,10 @@
-
-import 'package:geo_locator_app/data/repositories/api_repository_impl.dart';
-
 import '../entities/location_action.dart';
+import '../repositories/api_repository.dart';
 
 class GetLocationUseCase {
   const GetLocationUseCase({required this.apiRepository});
 
-  final ApiRepositoryImpl apiRepository;
+  final ApiRepository apiRepository;
 
   Future<LocationAction> invoke() async {
     return await apiRepository.requestLocation();

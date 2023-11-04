@@ -3,7 +3,6 @@ package com.example.geo_locator_app
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Location
 import android.location.LocationManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -18,6 +17,18 @@ import org.json.JSONObject
 class MainActivity : FlutterActivity() {
     private val channelName = "geolocator_app_channel_name"
     private var initialRun = true;
+    private var resultChannel: MethodChannel.Result? = null
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (permissions.contains("android.permission.ACCESS_FINE_LOCATION")) {
+            GlobalScope.launch { getLocationFromNative() }
+        }
+    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -28,7 +39,8 @@ class MainActivity : FlutterActivity() {
                 channelName,
             ).setMethodCallHandler { call, result ->
                 if (call.method == "getLocationFromNative") {
-                    getLocationFromNative(result)
+                    resultChannel = result
+                    getLocationFromNative()
                 } else {
                     result.notImplemented()
                 }
@@ -36,7 +48,7 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    private fun getLocationFromNative(resultChannel:  MethodChannel.Result) {
+    private fun getLocationFromNative() {
         try {
             if (ContextCompat.checkSelfPermission(
                     applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -53,20 +65,19 @@ class MainActivity : FlutterActivity() {
                     put("longitude", "${it?.longitude ?: "-"}")
                     put("latitude", "${it?.latitude ?: "-"}")
                 }.toString()
-
-                resultChannel.success(resultValue)
+                resultChannel?.success(resultValue)
             }
         } catch (e: Exception) {
             if ((e.message?.contains("does not have android.permission") == true) && initialRun) {
                 initialRun = false
-                getLocationFromNative(resultChannel)
+                return
             }
 
             val errorResultValue = JSONObject().apply {
                 put("error", "${e.message}")
             }.toString()
 
-            resultChannel.success(errorResultValue)
+            resultChannel?.success(errorResultValue)
         }
     }
 }

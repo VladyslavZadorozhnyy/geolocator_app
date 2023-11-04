@@ -22,6 +22,9 @@ class ApiRepositoryImpl implements ApiRepository {
       final String stringResult = await platformChannel.invokeMethod('getLocationFromNative');
       final jsonResult = json.decode(stringResult);
 
+      if (jsonResult["error"] != null) {
+        throw Exception(jsonResult["error"].toString());
+      }
       int endTime = DateTime.now().millisecondsSinceEpoch;
       LocationAction result = LocationAction(
         value: LocationPoint(

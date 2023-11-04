@@ -19,7 +19,7 @@ class HomePageScreen extends AbsPageScreen {
           case Status.loading:
             return buildLoadingScreen(context);
           case Status.failed:
-            return buildFailedScreen(context, state.errorMessage);
+            return _buildSuccessScreen(context, state, state.errorMessage);
           case Status.success:
             String message = 'Longitude:\n'
                 '${state.data?.value?.longitude ?? "-"}\n'

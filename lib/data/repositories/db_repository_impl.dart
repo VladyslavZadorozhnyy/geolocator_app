@@ -67,13 +67,6 @@ class DbRepositoryImpl implements DbRepository {
   }
 
   @override
-  Future<List<LocationPoint>> fetchAllLocationPoints() async {
-    final dbInstance = await _getDbInstance();
-    var queryResult = await dbInstance.query('pointActions', orderBy: "id");
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> deleteAllLocationActions() async {
     final db = await _getDbInstance();
     try {
