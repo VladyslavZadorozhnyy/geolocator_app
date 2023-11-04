@@ -1,16 +1,11 @@
-# geo_locator_app
+# GeoLocatorApp
 
-A new Flutter project.
+Project is made for Android only.
 
-## Getting Started
+## Following 3rd party libraries were used
+- flutter_bloc: for implementing Cubit approach
+- sqflite: for storing requested previously data
+- charts_flutter_new: for providing stats on how much time in general was needed for previous data retrieving
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Needed to mention:
+  - DI (dependency injection) was not applied yet, as it was not part of the problem
